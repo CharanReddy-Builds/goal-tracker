@@ -11,6 +11,7 @@ self.addEventListener('install', (event) => {
       return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {
@@ -25,7 +26,7 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
+        if (!response || response.status !== 200) {
           return response;
         }
 
@@ -36,7 +37,7 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       }).catch(() => {
-        return caches.match('/');
+        return caches.match('/index.html');
       });
     })
   );
@@ -54,4 +55,5 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim();
 });
